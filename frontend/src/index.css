@@ -1,0 +1,202 @@
+/* =========================
+   GLOBAL VARIABLES
+========================= */
+:root {
+  --bg-1: #0b1020;
+  --bg-2: #0f2a2a;
+
+  --text-main: #e9eef5;
+  --text-muted: #a9b3c7;
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+/* =========================
+   RESET & BASE
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  color: var(--text-main);
+
+  background:
+    radial-gradient(1000px 500px at 80% -20%, #1f4b47, transparent),
+    linear-gradient(135deg, var(--bg-1), var(--bg-2));
+
+  overflow: hidden;
+}
+
+/* =========================
+   GRID LAYOUT FIXES
+========================= */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: transform 200ms ease, width 200ms ease, height 200ms ease;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+}
+
+/* Resize handle */
+.react-resizable-handle {
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  bottom: 6px;
+  right: 6px;
+}
+
+/* =========================
+   WIDGET WINDOW
+========================= */
+.widget-frame {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.05)
+  );
+
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.45),
+    inset 0 1px rgba(255, 255, 255, 0.15);
+
+  overflow: hidden;
+}
+
+/* =========================
+   WIDGET HEADER (DRAG)
+========================= */
+.widget-header {
+  cursor: move;
+  user-select: none;
+
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  color: var(--accent, #4fd1c5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15),
+    transparent
+  );
+}
+
+.widget-icon {
+  font-size: 1.2rem;
+}
+
+.widget-title {
+  flex: 1;
+}
+
+/* =========================
+   WIDGET CONTENT
+========================= */
+.widget-content {
+  padding: 16px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* =========================
+   VALUES
+========================= */
+.big-value {
+  font-size: 2.3rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--accent, #4fd1c5);
+}
+
+/* =========================
+   BAR / GAUGE
+========================= */
+.bar {
+  margin-top: 14px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--accent, #4fd1c5);
+  box-shadow: 0 0 14px var(--accent, #4fd1c5);
+  transition: width 0.3s ease;
+}
+
+/* =========================
+   TEXT HELPERS
+========================= */
+.muted {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* =========================
+   SCROLLBAR (OPTIONAL)
+========================= */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+}
+
+.add-widget-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 16px 22px;
+  font-size: 1.1rem;
+  border-radius: 999px;
+  border: none;
+  background: #4fd1c5;
+  color: #041313;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}

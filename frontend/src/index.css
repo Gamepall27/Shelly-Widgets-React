@@ -256,3 +256,165 @@ body {
   background: var(--accent, #4fd1c5);
   box-shadow: 0 0 10px var(--accent, #4fd1c5);
 }
+
+/* ===== Circle indicator ===== */
+.circle-indicator {
+  --size: 88px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      var(--accent, #4fd1c5) var(--progress, 0%),
+      rgba(255, 255, 255, 0.12) 0%
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-center {
+  width: calc(var(--size) - 26px);
+  height: calc(var(--size) - 26px);
+  border-radius: 50%;
+  background: rgba(8, 12, 22, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ===== Edit modal ===== */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.edit-modal {
+  width: min(520px, 92vw);
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(16, 22, 36, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.edit-modal h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+}
+
+.edit-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.edit-form input,
+.edit-form select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.edit-form input[type="color"] {
+  padding: 4px;
+  height: 40px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.edit-actions button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-chart {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.edit-chart-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 24px 0;
+}
+
+@media (max-width: 720px) {
+  .edit-modal {
+    width: min(560px, 96vw);
+    padding: 20px;
+  }
+
+  .edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-form label {
+    font-size: 0.95rem;
+  }
+
+  .edit-form input,
+  .edit-form select {
+    font-size: 1rem;
+    padding: 12px 12px;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .edit-actions button {
+    width: 100%;
+    padding: 14px 16px;
+  }
+}
+
+.edit-actions .primary {
+  background: #4fd1c5;
+  color: #041313;
+}
+
+.edit-actions .ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.edit-actions .danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}

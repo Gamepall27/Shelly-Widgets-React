@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GridLayout from "react-grid-layout";
 import { useShellyWs } from "./hooks/useShellyWs";
 import AutoWidget from "./widgets/AutoWidget";
@@ -52,6 +52,7 @@ export default function Dashboard() {
     const [widgetConfig, setWidgetConfig] = useState({});
     const [deletedMetrics, setDeletedMetrics] = useState([]);
     const [editingWidget, setEditingWidget] = useState(null);
+    const [metricHistory, setMetricHistory] = useState({});
     const [formState, setFormState] = useState({
         title: "",
         color: "#4fd1c5",
@@ -59,8 +60,24 @@ export default function Dashboard() {
         h: 2,
         min: "",
         max: "",
-        indicatorType: "bar"
+        indicatorType: "bar",
+        statsRange: "15"
     });
+
+    useEffect(() => {
+        if (!metrics) return;
+        const timestamp = Date.now();
+        setMetricHistory(prev => {
+            const next = { ...prev };
+            Object.entries(metrics).forEach(([key, value]) => {
+                const entry = { t: timestamp, v: Number(value) };
+                const existing = next[key] ?? [];
+                const sanitized = Number.isFinite(entry.v) ? [...existing, entry] : existing;
+                next[key] = sanitized.slice(-360);
+            });
+            return next;
+        });
+    }, [metrics]);
 
     const widgets = useMemo(() => {
         if (!metrics) return [];
@@ -101,7 +118,8 @@ export default function Dashboard() {
             h: config.h ?? widget.h,
             min: config.min ?? range.min,
             max: config.max ?? range.max,
-            indicatorType: config.indicatorType ?? "bar"
+            indicatorType: config.indicatorType ?? "bar",
+            statsRange: config.statsRange ?? "15"
         });
     };
 
@@ -117,7 +135,8 @@ export default function Dashboard() {
                 h: parseNumber(formState.h) ?? 2,
                 min: parseNumber(formState.min),
                 max: parseNumber(formState.max),
-                indicatorType: formState.indicatorType
+                indicatorType: formState.indicatorType,
+                statsRange: formState.statsRange
             }
         }));
         closeEditor();
@@ -144,6 +163,7 @@ export default function Dashboard() {
                 width={window.innerWidth}
                 draggableHandle=".widget-header"
                 isResizable
+                resizeHandles={["se"]}
                 compactType={null}
                 preventCollision={false}
             >
@@ -158,6 +178,8 @@ export default function Dashboard() {
                             min={widgetConfig[w.metric]?.min}
                             max={widgetConfig[w.metric]?.max}
                             indicatorType={widgetConfig[w.metric]?.indicatorType}
+                            statsRange={widgetConfig[w.metric]?.statsRange}
+                            history={metricHistory[w.metric]}
                             onEdit={() => openEditor(w)}
                         />
                     </div>
@@ -228,6 +250,17 @@ export default function Dashboard() {
                                 >
                                     <option value="bar">Balken</option>
                                     <option value="circle">Kreis</option>
+                                </select>
+                            </label>
+                            <label>
+                                Statistik-Zeitraum (Minuten)
+                                <select
+                                    value={formState.statsRange}
+                                    onChange={(event) => setFormState(prev => ({ ...prev, statsRange: event.target.value }))}
+                                >
+                                    <option value="5">5</option>
+                                    <option value="15">15</option>
+                                    <option value="60">60</option>
                                 </select>
                             </label>
                         </div>

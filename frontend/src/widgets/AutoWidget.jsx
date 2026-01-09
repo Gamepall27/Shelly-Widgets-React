@@ -47,8 +47,40 @@ function getRange(type, min, max) {
     };
 }
 
-export default function AutoWidget({ metric, value, type, title, color, min, max, indicatorType = "bar", onEdit }) {
+function StatsChart({ history = [], rangeMinutes = 15 }) {
+    const rangeMs = rangeMinutes * 60 * 1000;
+    const now = Date.now();
+    const filtered = history.filter(point => now - point.t <= rangeMs);
+    if (filtered.length < 2) {
+        return <div className="stats-empty">Keine Daten</div>;
+    }
+    const values = filtered.map(point => point.v);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const span = maxValue - minValue || 1;
+    const width = 200;
+    const height = 60;
+    const step = width / (filtered.length - 1);
+    const points = filtered
+        .map((point, index) => {
+            const x = index * step;
+            const y = height - ((point.v - minValue) / span) * height;
+            return `${x},${y}`;
+        })
+        .join(" ");
+
+    return (
+        <svg className="stats-chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+            <polyline points={points} />
+        </svg>
+    );
+}
+
+const NUMERIC_TYPES = new Set(["temperature", "power", "energy", "voltage", "current", "number"]);
+
+export default function AutoWidget({ metric, value, type, title, color, min, max, indicatorType = "bar", statsRange = "15", history, onEdit }) {
     const range = getRange(type, min, max);
+    const rangeMinutes = Number(statsRange) || 15;
     return (
         <WidgetFrame
             title={title ?? getLabel(metric)}
@@ -130,6 +162,12 @@ export default function AutoWidget({ metric, value, type, title, color, min, max
                     </>
                 )}
             </div>
+            {NUMERIC_TYPES.has(type) && (
+                <div className="widget-stats">
+                    <StatsChart history={history} rangeMinutes={rangeMinutes} />
+                    <div className="stats-range">Letzte {rangeMinutes} Min.</div>
+                </div>
+            )}
         </WidgetFrame>
     );
 }

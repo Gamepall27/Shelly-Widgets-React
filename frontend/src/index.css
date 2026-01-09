@@ -133,6 +133,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 12px;
 }
 
 /* =========================
@@ -208,6 +209,35 @@ body {
   gap: 16px;
 }
 
+.widget-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stats-chart {
+  width: 100%;
+  height: 64px;
+}
+
+.stats-chart polyline {
+  fill: none;
+  stroke: var(--accent, #4fd1c5);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stats-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stats-range {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
 /* ===== Thermometer ===== */
 .thermo {
   position: relative;
@@ -255,4 +285,155 @@ body {
   height: 100%;
   background: var(--accent, #4fd1c5);
   box-shadow: 0 0 10px var(--accent, #4fd1c5);
+}
+
+/* ===== Circle indicator ===== */
+.circle-indicator {
+  --size: 88px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      var(--accent, #4fd1c5) var(--progress, 0%),
+      rgba(255, 255, 255, 0.12) 0%
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-center {
+  width: calc(var(--size) - 26px);
+  height: calc(var(--size) - 26px);
+  border-radius: 50%;
+  background: rgba(8, 12, 22, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ===== Edit modal ===== */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.edit-modal {
+  width: min(520px, 92vw);
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(16, 22, 36, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.edit-modal h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+}
+
+.edit-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.edit-form input,
+.edit-form select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  min-height: 42px;
+}
+
+.edit-form input[type="color"] {
+  padding: 4px;
+  height: 40px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.edit-actions button {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-actions .primary {
+  background: #4fd1c5;
+  color: #041313;
+}
+
+.edit-actions .ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.edit-actions .danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+@media (pointer: coarse) {
+  .react-resizable-handle {
+    width: 22px;
+    height: 22px;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .edit-modal {
+    width: min(600px, 96vw);
+    padding: 28px;
+  }
+
+  .edit-form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .edit-form input,
+  .edit-form select {
+    min-height: 50px;
+    font-size: 1rem;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .edit-actions button {
+    width: 100%;
+    min-height: 50px;
+    font-size: 1rem;
+  }
 }

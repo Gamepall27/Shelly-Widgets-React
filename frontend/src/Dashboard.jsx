@@ -119,7 +119,7 @@ export default function Dashboard() {
             min: config.min ?? range.min,
             max: config.max ?? range.max,
             indicatorType: config.indicatorType ?? "bar",
-            statsRange: config.statsRange ?? "15"
+            statsRange: String(config.statsRange ?? "15")
         });
     };
 
@@ -136,7 +136,7 @@ export default function Dashboard() {
                 min: parseNumber(formState.min),
                 max: parseNumber(formState.max),
                 indicatorType: formState.indicatorType,
-                statsRange: formState.statsRange
+                statsRange: parseNumber(formState.statsRange) ?? 15
             }
         }));
         closeEditor();

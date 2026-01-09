@@ -402,6 +402,11 @@ body {
 }
 
 @media (pointer: coarse) {
+  .react-resizable-handle {
+    width: 24px;
+    height: 24px;
+  }
+
   .edit-modal {
     width: min(600px, 96vw);
     padding: 28px;

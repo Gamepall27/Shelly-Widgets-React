@@ -76,9 +76,7 @@ function StatsChart({ history = [], rangeMinutes = 15 }) {
     );
 }
 
-const NUMERIC_TYPES = new Set(["temperature", "power", "energy", "voltage", "current", "number"]);
-
-export default function AutoWidget({ metric, value, type, title, color, min, max, indicatorType = "bar", statsRange = "15", history, onEdit }) {
+export default function AutoWidget({ metric, value, type, title, color, min, max, indicatorType = "bar", statsRange = 15, history, onEdit }) {
     const range = getRange(type, min, max);
     const rangeMinutes = Number(statsRange) || 15;
     return (
@@ -162,7 +160,7 @@ export default function AutoWidget({ metric, value, type, title, color, min, max
                     </>
                 )}
             </div>
-            {NUMERIC_TYPES.has(type) && (
+            {history && (
                 <div className="widget-stats">
                     <StatsChart history={history} rangeMinutes={rangeMinutes} />
                     <div className="stats-range">Letzte {rangeMinutes} Min.</div>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelly Widgets Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Shelly Widgets Manager</h1>
+        <p>Backend und Frontend starten sowie Shelly-Devices konfigurieren.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="open-frontend" type="button">Frontend öffnen</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>Dienste</h2>
+        <div class="service">
+          <div>
+            <h3>Backend</h3>
+            <p>Status: <span class="status" data-status="backend">stoppt</span></p>
+          </div>
+          <div class="buttons">
+            <button class="btn" id="start-backend" type="button">Starten</button>
+            <button class="btn-secondary" id="stop-backend" type="button">Stoppen</button>
+          </div>
+        </div>
+        <div class="service">
+          <div>
+            <h3>Frontend</h3>
+            <p>Status: <span class="status" data-status="frontend">stoppt</span></p>
+          </div>
+          <div class="buttons">
+            <button class="btn" id="start-frontend" type="button">Starten</button>
+            <button class="btn-secondary" id="stop-frontend" type="button">Stoppen</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Geräteverwaltung</h2>
+        <p>
+          Pflege hier deine Shelly-Geräte. Format: <strong>id | name | baseUrl</strong>.
+          Die Einträge werden in <code>backend/.env</code> gespeichert.
+        </p>
+        <button class="btn" id="edit-devices" type="button">Geräte bearbeiten</button>
+        <div class="device-preview" id="device-preview"></div>
+      </section>
+
+      <section class="card logs">
+        <h2>Logs</h2>
+        <div class="log-columns">
+          <div>
+            <h3>Backend</h3>
+            <pre id="backend-log" aria-live="polite"></pre>
+          </div>
+          <div>
+            <h3>Frontend</h3>
+            <pre id="frontend-log" aria-live="polite"></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="device-modal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <header>
+          <h2>Geräte bearbeiten</h2>
+          <button class="btn-icon" id="close-modal" aria-label="Schließen">✕</button>
+        </header>
+        <div id="device-list"></div>
+        <button class="btn-secondary" id="add-device" type="button">Gerät hinzufügen</button>
+        <footer>
+          <button class="btn-secondary" id="cancel-devices" type="button">Abbrechen</button>
+          <button class="btn" id="save-devices" type="button">Speichern</button>
+        </footer>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

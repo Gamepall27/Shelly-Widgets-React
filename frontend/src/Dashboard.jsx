@@ -42,6 +42,17 @@ export default function Dashboard() {
     const [widgetConfigs, setWidgetConfigs] = useState({});
     const [editorState, setEditorState] = useState(null);
 
+    const handleResizeStop = (layout, oldItem, newItem) => {
+        setWidgetConfigs(prev => ({
+            ...prev,
+            [newItem.i]: {
+                ...prev[newItem.i],
+                w: newItem.w,
+                h: newItem.h
+            }
+        }));
+    };
+
     const openEditor = (widget) => {
         setEditorState({
             key: widget.metric,
@@ -133,6 +144,8 @@ export default function Dashboard() {
                 width={window.innerWidth}
                 draggableHandle=".widget-header"
                 isResizable
+                resizeHandles={["se"]}
+                onResizeStop={handleResizeStop}
                 compactType={null}
                 preventCollision={false}
             >

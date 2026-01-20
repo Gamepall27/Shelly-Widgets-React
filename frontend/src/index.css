@@ -57,12 +57,26 @@ body {
 
 /* Resize handle */
 .react-resizable-handle {
+  position: absolute;
   width: 16px;
   height: 16px;
   background: rgba(255, 255, 255, 0.25);
   border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.react-resizable-handle-se {
   bottom: 6px;
   right: 6px;
+  cursor: se-resize;
+}
+
+.react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-right: 2px solid rgba(255, 255, 255, 0.65);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.65);
 }
 
 /* =========================

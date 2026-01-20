@@ -10,11 +10,30 @@ const { WebSocketServer } = require("ws");
 
 const PORT = Number(process.env.PORT || 3000);
 const WS_PATH = process.env.WS_PATH || "/ws";
-const SHELLY_BASE = process.env.SHELLY_BASE_URL;
 const POLL_SEC = Number(process.env.STATUS_POLL_SEC || 3);
 
+function parseShellyDevices(value) {
+  if (!value) return [];
+  return value
+    .split(/[;,]\s*/)
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [id, name, baseUrl] = entry.split("|");
+      return {
+        id: (id || "").trim(),
+        name: (name || "").trim(),
+        baseUrl: (baseUrl || "").trim()
+      };
+    })
+    .filter((device) => device.id || device.name || device.baseUrl);
+}
+
+const SHELLY_DEVICES = parseShellyDevices(process.env.SHELLY_DEVICES);
+const SHELLY_BASE = process.env.SHELLY_BASE_URL || SHELLY_DEVICES[0]?.baseUrl;
+
 if (!SHELLY_BASE) {
-  console.error("❌ SHELLY_BASE_URL fehlt in .env");
+  console.error("❌ SHELLY_BASE_URL fehlt in .env (oder SHELLY_DEVICES ist leer)");
   process.exit(1);
 }
 
@@ -132,6 +151,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     ok: true,
     shelly: SHELLY_BASE,
+    devices: SHELLY_DEVICES,
     state
   });
 });

@@ -37,3 +37,22 @@ body,
 button {
   -webkit-font-smoothing: antialiased;
 }
+
+.react-resizable-handle {
+  width: 14px;
+  height: 14px;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(79, 209, 197, 0.7);
+  border-radius: 4px;
+  border: 2px solid rgba(15, 17, 26, 0.7);
+  box-shadow: 0 0 0 2px rgba(79, 209, 197, 0.25);
+}
+
+.react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-bottom: 2px solid rgba(11, 16, 32, 0.7);
+  border-right: 2px solid rgba(11, 16, 32, 0.7);
+}

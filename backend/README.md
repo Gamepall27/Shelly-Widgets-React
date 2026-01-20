@@ -6,6 +6,10 @@
 - .env anpassen
 - npm start
 
+## Shelly-Geräte
+- Backend kann SHELLY_BASE_URL oder SHELLY_DEVICES (id|name|baseUrl, komma-separiert) nutzen.
+- Wenn SHELLY_BASE_URL leer ist, wird das erste Gerät aus SHELLY_DEVICES verwendet.
+
 ## API
 - GET  /api/health
 - GET  /api/state

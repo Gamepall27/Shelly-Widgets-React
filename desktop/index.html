@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelly Dashboard Desktop</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <h1>Shelly Dashboard Desktop</h1>
+        <p>Backend und Frontend starten, Logs ansehen und Shelly-Geräte verwalten.</p>
+      </header>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Backend</h2>
+          <div class="actions">
+            <button id="backend-start" class="primary">Starten</button>
+            <button id="backend-stop" class="secondary">Stoppen</button>
+          </div>
+          <div class="status" id="backend-status">Status: unbekannt</div>
+          <pre id="backend-logs" class="logs"></pre>
+        </div>
+
+        <div class="card">
+          <h2>Frontend</h2>
+          <div class="actions">
+            <button id="frontend-start" class="primary">Starten</button>
+            <button id="frontend-stop" class="secondary">Stoppen</button>
+          </div>
+          <div class="status" id="frontend-status">Status: unbekannt</div>
+          <pre id="frontend-logs" class="logs"></pre>
+        </div>
+      </section>
+
+      <section class="card devices">
+        <div class="devices-header">
+          <h2>Shelly-Geräte</h2>
+          <button id="device-open" class="primary">Geräte verwalten</button>
+        </div>
+        <p>Geräte werden in der backend/.env über <code>SHELLY_DEVICES</code> gepflegt.</p>
+        <ul id="device-list" class="device-list"></ul>
+      </section>
+
+      <div id="overlay" class="overlay hidden">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Shelly-Geräte bearbeiten</h3>
+            <button id="device-close" class="ghost">✕</button>
+          </div>
+          <div id="device-form" class="device-form"></div>
+          <div class="modal-actions">
+            <button id="device-add" class="secondary">Neues Gerät</button>
+            <button id="device-save" class="primary">Speichern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

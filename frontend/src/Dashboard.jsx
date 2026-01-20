@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useEffect, useMemo, useRef, useState } from "react";
+=======
+import { useMemo } from "react";
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 =======
 import { useMemo } from "react";
 >>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
@@ -8,6 +12,7 @@ import { useShellyWs } from "./hooks/useShellyWs";
 import AutoWidget from "./widgets/AutoWidget";
 import { detectWidgetType } from "./widgets/detectWidgetType";
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -101,6 +106,8 @@ function defaultConfig(key, value) {
     h: 2,
   };
 =======
+=======
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 function defaultSize(type) {
     switch (type) {
         case "temperature": return { w: 2, h: 3 };
@@ -109,6 +116,7 @@ function defaultSize(type) {
         case "boolean": return { w: 2, h: 2 };
         default: return { w: 2, h: 2 };
     }
+<<<<<<< HEAD
 >>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 }
 
@@ -301,6 +309,32 @@ export default function Dashboard() {
         });
     }, [metrics]);
 
+=======
+}
+
+export default function Dashboard() {
+    const { metrics } = useShellyWs();
+
+    const widgets = useMemo(() => {
+        if (!metrics) return [];
+
+        return Object.entries(metrics).map(([key, value], index) => {
+            const type = detectWidgetType(value, key);
+            const size = defaultSize(type);
+
+            return {
+                i: key,
+                metric: key,
+                value,
+                type,
+                ...size,
+                x: (index % 6) * 2,
+                y: Math.floor(index / 6) * 2
+            };
+        });
+    }, [metrics]);
+
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
     return (
         <GridLayout
             cols={12}
@@ -323,5 +357,8 @@ export default function Dashboard() {
             ))}
         </GridLayout>
     );
+<<<<<<< HEAD
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
+=======
 >>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 }

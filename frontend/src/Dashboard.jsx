@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 import { useEffect, useMemo, useRef, useState } from "react";
+=======
+import { useMemo } from "react";
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 import GridLayout from "react-grid-layout";
 import { useShellyWs } from "./hooks/useShellyWs";
 import AutoWidget from "./widgets/AutoWidget";
-import WidgetConfigModal from "./components/WidgetConfigModal";
+import { detectWidgetType } from "./widgets/detectWidgetType";
 
+<<<<<<< HEAD
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "./styles/widgets.css";
@@ -95,6 +100,16 @@ function defaultConfig(key, value) {
     w: 2,
     h: 2,
   };
+=======
+function defaultSize(type) {
+    switch (type) {
+        case "temperature": return { w: 2, h: 3 };
+        case "power": return { w: 3, h: 2 };
+        case "energy": return { w: 3, h: 2 };
+        case "boolean": return { w: 2, h: 2 };
+        default: return { w: 2, h: 2 };
+    }
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 }
 
 function widgetId(deviceId, metricKey) {
@@ -112,6 +127,7 @@ function useWindowWidth() {
 }
 
 export default function Dashboard() {
+<<<<<<< HEAD
   const { state } = useShellyWs();
   const devices = state?.devices || {};
 
@@ -141,11 +157,14 @@ export default function Dashboard() {
     const ids = allMetricEntries.map((m) => m.id).sort();
     return ids.join("|");
   }, [allMetricEntries]);
+=======
+    const { metrics } = useShellyWs();
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 
-  const [widgets, setWidgets] = useState([]);
-  const [layout, setLayout] = useState([]);
-  const [editingWidget, setEditingWidget] = useState(null);
+    const widgets = useMemo(() => {
+        if (!metrics) return [];
 
+<<<<<<< HEAD
   // Damit wir nicht auf JEDEM Render setState triggern
   const lastSigRef = useRef("");
 
@@ -265,4 +284,44 @@ export default function Dashboard() {
       )}
     </div>
   );
+=======
+        return Object.entries(metrics).map(([key, value], index) => {
+            const type = detectWidgetType(value, key);
+            const size = defaultSize(type);
+
+            return {
+                i: key,
+                metric: key,
+                value,
+                type,
+                ...size,
+                x: (index % 6) * 2,
+                y: Math.floor(index / 6) * 2
+            };
+        });
+    }, [metrics]);
+
+    return (
+        <GridLayout
+            cols={12}
+            rowHeight={60}
+            margin={[12, 12]}
+            width={window.innerWidth}
+            draggableHandle=".widget-header"
+            isResizable
+            compactType={null}
+            preventCollision={false}
+        >
+            {widgets.map(w => (
+                <div key={w.i} data-grid={w}>
+                    <AutoWidget
+                        metric={w.metric}
+                        value={w.value}
+                        type={w.type}
+                    />
+                </div>
+            ))}
+        </GridLayout>
+    );
+>>>>>>> parent of f27d16c (Doppelklick action und Widget editor hinzugefügt)
 }

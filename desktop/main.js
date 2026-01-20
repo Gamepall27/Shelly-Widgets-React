@@ -15,8 +15,15 @@ const processes = {
   frontend: null
 };
 
-function getNpmCommand() {
-  return process.platform === "win32" ? "npm.cmd" : "npm";
+function getNpmLaunch() {
+  if (process.platform === "win32") {
+    return {
+      command: process.env.comspec || "cmd.exe",
+      args: ["/d", "/s", "/c", "npm"]
+    };
+  }
+
+  return { command: "npm", args: [] };
 }
 
 function emitStatus(name, status) {
@@ -38,12 +45,25 @@ function startProcess(name, options) {
     return { ok: false, message: `${name} läuft bereits.` };
   }
 
-  const child = spawn(options.command, options.args, {
-    cwd: options.cwd,
-    env: { ...process.env, ...options.env },
-    stdio: ["ignore", "pipe", "pipe"],
-    detached: process.platform !== "win32"
-  });
+  if (!options || !options.command || !Array.isArray(options.args)) {
+    return { ok: false, message: "Ungueltige Prozessoptionen." };
+  }
+
+  if (!options.cwd || !fs.existsSync(options.cwd)) {
+    return { ok: false, message: `Arbeitsverzeichnis nicht gefunden: ${options.cwd}` };
+  }
+
+  let child;
+  try {
+    child = spawn(options.command, options.args, {
+      cwd: options.cwd,
+      env: { ...process.env, ...options.env },
+      stdio: ["ignore", "pipe", "pipe"],
+      detached: process.platform !== "win32"
+    });
+  } catch (error) {
+    return { ok: false, message: `Start fehlgeschlagen: ${error.message}` };
+  }
 
   processes[name] = child;
   emitStatus(name, "running");
@@ -54,6 +74,12 @@ function startProcess(name, options) {
 
   child.stderr.on("data", (data) => {
     emitLog(name, data.toString());
+  });
+
+  child.on("error", (error) => {
+    processes[name] = null;
+    emitStatus(name, "stopped");
+    emitLog(name, `Start fehlgeschlagen: ${error.message}\n`);
   });
 
   child.on("exit", (code) => {
@@ -192,10 +218,10 @@ ipcMain.handle("get-status", () => ({
 }));
 
 ipcMain.handle("start-backend", () => {
-  const command = getNpmCommand();
+  const npm = getNpmLaunch();
   return startProcess("backend", {
-    command,
-    args: ["start"],
+    command: npm.command,
+    args: [...npm.args, "start"],
     cwd: backendDir
   });
 });
@@ -203,10 +229,10 @@ ipcMain.handle("start-backend", () => {
 ipcMain.handle("stop-backend", async () => stopProcess("backend"));
 
 ipcMain.handle("start-frontend", () => {
-  const command = getNpmCommand();
+  const npm = getNpmLaunch();
   return startProcess("frontend", {
-    command,
-    args: ["run", "dev", "--", "--host"],
+    command: npm.command,
+    args: [...npm.args, "run", "dev", "--", "--host"],
     cwd: frontendDir
   });
 });

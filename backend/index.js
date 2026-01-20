@@ -96,19 +96,29 @@ async function pollShelly() {
     const data = await shellyRpc("Shelly.GetStatus");
 
     const sw = data["switch:0"];
+    const updated = {};
 
     if (sw) {
-      state.metrics.output = sw.output ?? null;
-      state.metrics.apower = sw.apower ?? null;
-      state.metrics.voltage = sw.voltage ?? null;
-      state.metrics.current = sw.current ?? null;
-      state.metrics.energyWh = sw.aenergy?.total ?? null;
-      state.metrics.temperatureC = sw.temperature?.tC ?? null;
+      updated.output = sw.output ?? null;
+      updated.apower = sw.apower ?? null;
+      updated.voltage = sw.voltage ?? null;
+      updated.current = sw.current ?? null;
+      updated.energyWh = sw.aenergy?.total ?? null;
+      updated.temperatureC = sw.temperature?.tC ?? null;
     }
 
+    Object.assign(state.metrics, updated);
     state.metrics.lastUpdateTs = Date.now();
     state.connected = true;
     state.lastError = null;
+
+    console.log(
+      "[poll] Shelly.GetStatus",
+      JSON.stringify({
+        source: SHELLY_BASE,
+        metrics: { ...updated, lastUpdateTs: state.metrics.lastUpdateTs }
+      })
+    );
 
     broadcast({
       type: "update",

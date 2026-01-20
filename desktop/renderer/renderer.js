@@ -35,7 +35,11 @@ function setStatus(name, status) {
 function appendLog(name, line) {
   const el = logEls[name];
   if (!el) return;
-  el.textContent += line;
+  const cleaned = line
+    .replace(/\u001b\[[0-9;]*m/g, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
+  el.textContent += cleaned;
   el.scrollTop = el.scrollHeight;
 }
 

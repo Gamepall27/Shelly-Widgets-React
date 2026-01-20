@@ -10,11 +10,27 @@ const { WebSocketServer } = require("ws");
 
 const PORT = Number(process.env.PORT || 3000);
 const WS_PATH = process.env.WS_PATH || "/ws";
+const SHELLY_DEVICES = process.env.SHELLY_DEVICES || "";
 const SHELLY_BASE = process.env.SHELLY_BASE_URL;
 const POLL_SEC = Number(process.env.STATUS_POLL_SEC || 3);
 
-if (!SHELLY_BASE) {
-  console.error("❌ SHELLY_BASE_URL fehlt in .env");
+function parseDevices(value) {
+  if (!value) return [];
+  return value
+    .split(";")
+    .filter(Boolean)
+    .map((entry) => {
+      const [id = "", name = "", baseUrl = ""] = entry.split("|");
+      return { id, name, baseUrl };
+    })
+    .filter((device) => device.baseUrl);
+}
+
+const devices = parseDevices(SHELLY_DEVICES);
+const resolvedBaseUrl = SHELLY_BASE || devices[0]?.baseUrl || "";
+
+if (!resolvedBaseUrl) {
+  console.error("❌ SHELLY_BASE_URL oder SHELLY_DEVICES fehlt in .env");
   process.exit(1);
 }
 
@@ -52,7 +68,7 @@ const state = {
 ======================= */
 
 async function shellyRpc(method, params = {}) {
-  const url = `${SHELLY_BASE}/rpc/${method}`;
+  const url = `${resolvedBaseUrl}/rpc/${method}`;
 
   const res = await fetch(url, {
     method: "POST",
@@ -131,7 +147,7 @@ wss.on("connection", (ws) => {
 app.get("/api/health", (req, res) => {
   res.json({
     ok: true,
-    shelly: SHELLY_BASE,
+    shelly: resolvedBaseUrl,
     state
   });
 });
@@ -162,7 +178,7 @@ app.post("/api/toggle", async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`✅ Backend läuft auf http://localhost:${PORT}`);
-  console.log(`🔁 Polling Shelly alle ${POLL_SEC}s → ${SHELLY_BASE}`);
+  console.log(`🔁 Polling Shelly alle ${POLL_SEC}s → ${resolvedBaseUrl}`);
 });
 
 setInterval(pollShelly, POLL_SEC * 1000);

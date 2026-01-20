@@ -19,6 +19,18 @@
    - npm run dev
    - Browser: http://localhost:5173
 
+## Desktop Manager (Electron)
+Der Desktop Manager startet Backend/Frontend getrennt und ermöglicht das Bearbeiten der Shelly-Devices über ein Overlay.
+
+1) Abhängigkeiten installieren:
+   - cd desktop
+   - npm install
+2) Starten:
+   - npm start
+
+Die Device-Liste wird in `backend/.env` unter `SHELLY_DEVICES` gespeichert:
+`id|name|baseUrl;id2|name2|baseUrl2`. Wenn `SHELLY_BASE_URL` leer ist, nutzt das Backend die erste Base URL.
+
 ## Fake-Daten senden (ohne Shelly)
 Wenn du Mosquitto per Docker laufen hast (Container-Name: mosquitto):
 - Subscriber:

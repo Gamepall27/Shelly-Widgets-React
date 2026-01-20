@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelly Dashboard Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Shelly Dashboard Manager</h1>
+      <p>Backend & Frontend starten sowie Shelly-Devices verwalten.</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Services</h2>
+        <div class="service-grid">
+          <div class="service">
+            <div class="service-header">
+              <span>Backend</span>
+              <span class="status" id="backend-status">Gestoppt</span>
+            </div>
+            <div class="service-actions">
+              <button id="backend-start" class="btn-primary">Starten</button>
+              <button id="backend-stop" class="btn-secondary">Stoppen</button>
+            </div>
+          </div>
+          <div class="service">
+            <div class="service-header">
+              <span>Frontend</span>
+              <span class="status" id="frontend-status">Gestoppt</span>
+            </div>
+            <div class="service-actions">
+              <button id="frontend-start" class="btn-primary">Starten</button>
+              <button id="frontend-stop" class="btn-secondary">Stoppen</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="devices-header">
+          <h2>Shelly-Devices</h2>
+          <button id="add-device" class="btn-primary">Device hinzufügen</button>
+        </div>
+        <div id="devices-empty" class="empty-state">Keine Devices konfiguriert.</div>
+        <table id="devices-table" class="devices-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Base URL</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <div id="device-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="modal-title">Device bearbeiten</h3>
+        <form id="device-form">
+          <label>
+            ID
+            <input type="text" name="id" required />
+          </label>
+          <label>
+            Name
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Base URL
+            <input type="text" name="baseUrl" placeholder="http://192.168.1.10" required />
+          </label>
+        </form>
+        <div class="modal-actions">
+          <button id="modal-cancel" class="btn-secondary" type="button">Abbrechen</button>
+          <button id="modal-save" class="btn-primary" type="button">Speichern</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

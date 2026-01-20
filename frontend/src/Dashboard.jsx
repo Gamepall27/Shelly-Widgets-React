@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GridLayout from "react-grid-layout";
+import { ResizableBox } from "react-resizable";
 import { useShellyWs } from "./hooks/useShellyWs";
 import AutoWidget from "./widgets/AutoWidget";
 import { detectWidgetType } from "./widgets/detectWidgetType";
@@ -41,6 +42,21 @@ export default function Dashboard() {
     const { metrics } = useShellyWs();
     const [widgetConfigs, setWidgetConfigs] = useState({});
     const [editorState, setEditorState] = useState(null);
+    const [gridWidth, setGridWidth] = useState(window.innerWidth);
+
+    const cols = 12;
+    const rowHeight = 60;
+    const gridMargin = [12, 12];
+
+    useEffect(() => {
+        const handleResize = () => setGridWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const colWidth = useMemo(() => (
+        (gridWidth - gridMargin[0] * (cols + 1)) / cols
+    ), [gridWidth, gridMargin, cols]);
 
     const openEditor = (widget) => {
         setEditorState({
@@ -94,6 +110,26 @@ export default function Dashboard() {
         closeEditor();
     };
 
+    const handleResizeStop = (key, size) => {
+        const nextW = Math.max(
+            1,
+            Math.round((size.width + gridMargin[0]) / (colWidth + gridMargin[0]))
+        );
+        const nextH = Math.max(
+            1,
+            Math.round((size.height + gridMargin[1]) / (rowHeight + gridMargin[1]))
+        );
+
+        setWidgetConfigs(prev => ({
+            ...prev,
+            [key]: {
+                ...prev[key],
+                w: nextW,
+                h: nextH
+            }
+        }));
+    };
+
     const widgets = useMemo(() => {
         if (!metrics) return [];
 
@@ -127,30 +163,46 @@ export default function Dashboard() {
     return (
         <>
             <GridLayout
-                cols={12}
-                rowHeight={60}
-                margin={[12, 12]}
-                width={window.innerWidth}
+                cols={cols}
+                rowHeight={rowHeight}
+                margin={gridMargin}
+                width={gridWidth}
                 draggableHandle=".widget-header"
-                isResizable
+                isResizable={false}
                 compactType={null}
                 preventCollision={false}
             >
-                {widgets.map(w => (
-                    <div key={w.i} data-grid={w}>
-                        <AutoWidget
-                            metric={w.metric}
-                            value={w.value}
-                            type={w.type}
-                            title={w.title}
-                            color={w.color}
-                            min={w.min}
-                            max={w.max}
-                            indicatorType={w.indicatorType}
-                            onDoubleClick={() => openEditor(w)}
-                        />
-                    </div>
-                ))}
+                {widgets.map(w => {
+                    const widthPx = w.w * colWidth + (w.w - 1) * gridMargin[0];
+                    const heightPx = w.h * rowHeight + (w.h - 1) * gridMargin[1];
+                    return (
+                        <div key={w.i} data-grid={w}>
+                            <ResizableBox
+                                width={widthPx}
+                                height={heightPx}
+                                minConstraints={[
+                                    colWidth + gridMargin[0],
+                                    rowHeight + gridMargin[1]
+                                ]}
+                                resizeHandles={["se"]}
+                                handle={<span className="react-resizable-handle react-resizable-handle-se" />}
+                                onResizeStop={(event, data) => handleResizeStop(w.i, data.size)}
+                            >
+                                <AutoWidget
+                                    metric={w.metric}
+                                    value={w.value}
+                                    type={w.type}
+                                    title={w.title}
+                                    color={w.color}
+                                    min={w.min}
+                                    max={w.max}
+                                    indicatorType={w.indicatorType}
+                                    onDoubleClick={() => openEditor(w)}
+                                />
+                            </ResizableBox>
+                        </div>
+                    );
+                })}
             </GridLayout>
 
             {editorState && (

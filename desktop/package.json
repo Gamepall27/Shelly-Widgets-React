@@ -1,0 +1,15 @@
+{
+  "name": "shelly-dashboard-desktop",
+  "version": "1.0.0",
+  "description": "Electron desktop manager for Shelly Dashboard",
+  "main": "main.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^30.0.1",
+    "tree-kill": "^1.2.2"
+  }
+}

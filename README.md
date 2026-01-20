@@ -19,6 +19,16 @@
    - npm run dev
    - Browser: http://localhost:5173
 
+## Desktop Manager (Electron)
+Für eine GUI zum Starten/Stoppen von Backend und Frontend sowie zur Pflege der
+`SHELLY_DEVICES`-Einträge in `backend/.env`:
+
+```bash
+cd desktop
+npm install
+npm start
+```
+
 ## Fake-Daten senden (ohne Shelly)
 Wenn du Mosquitto per Docker laufen hast (Container-Name: mosquitto):
 - Subscriber:

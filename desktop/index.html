@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelly Dashboard Manager</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: "Segoe UI", sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #0f1115;
+        color: #eef1f6;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .card {
+        background: #171a21;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        background: #2d3648;
+      }
+      .badge.running {
+        background: #1e4d2b;
+        color: #a9f5c3;
+      }
+      .badge.stopped {
+        background: #4c1f1f;
+        color: #ffb3b3;
+      }
+      button {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #2b6dff;
+        color: white;
+      }
+      button.secondary {
+        background: #3b4253;
+      }
+      button.danger {
+        background: #b03d3d;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 8px;
+      }
+      th {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #a9b2c4;
+      }
+      tr {
+        border-bottom: 1px solid #222735;
+      }
+      input {
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid #2b3245;
+        background: #0f1115;
+        color: #eef1f6;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .log {
+        background: #0c0e13;
+        border-radius: 10px;
+        padding: 12px;
+        height: 240px;
+        overflow: auto;
+        font-family: "SFMono-Regular", ui-monospace, monospace;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .notice {
+        font-size: 13px;
+        color: #b8c0d1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shelly Dashboard Manager</h1>
+    <p class="notice">
+      Starte und stoppe Backend/Frontend separat und verwalte die Shelly-Geräte aus der
+      <code>.env</code>-Datei im Backend.
+    </p>
+    <div class="grid">
+      <section class="card">
+        <h2>Services</h2>
+        <div class="status-row">
+          <div>
+            <strong>Backend</strong>
+            <div class="badge" id="backend-status">Status</div>
+          </div>
+          <div class="actions">
+            <button id="backend-start">Start</button>
+            <button id="backend-stop" class="danger">Stop</button>
+          </div>
+        </div>
+        <div class="status-row">
+          <div>
+            <strong>Frontend</strong>
+            <div class="badge" id="frontend-status">Status</div>
+          </div>
+          <div class="actions">
+            <button id="frontend-start">Start</button>
+            <button id="frontend-stop" class="danger">Stop</button>
+          </div>
+        </div>
+        <div>
+          <h3>Logs</h3>
+          <div class="log" id="log-output"></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Shelly-Geräte</h2>
+        <p class="notice" id="env-path"></p>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Base URL</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="device-table"></tbody>
+        </table>
+        <div class="actions" style="margin-top: 12px;">
+          <button id="add-device" class="secondary">+ Gerät hinzufügen</button>
+          <button id="save-devices">Speichern</button>
+        </div>
+        <p class="notice" id="device-message"></p>
+      </section>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
+</html>

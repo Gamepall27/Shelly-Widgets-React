@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shelly Desktop Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Shelly Desktop Manager</h1>
+      <p>Backend/Frontend starten &amp; Shelly-Geräte verwalten</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Services</h2>
+        <div class="service-grid">
+          <div class="service">
+            <h3>Backend</h3>
+            <p>Status: <span id="backend-status" class="badge">gestoppt</span></p>
+            <div class="actions">
+              <button id="start-backend">Start</button>
+              <button id="stop-backend" class="secondary">Stop</button>
+            </div>
+          </div>
+          <div class="service">
+            <h3>Frontend</h3>
+            <p>Status: <span id="frontend-status" class="badge">gestoppt</span></p>
+            <div class="actions">
+              <button id="start-frontend">Start</button>
+              <button id="stop-frontend" class="secondary">Stop</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Shelly Geräte</h2>
+          <button id="edit-devices" class="primary">Geräte bearbeiten</button>
+        </div>
+        <p class="muted">Die Änderungen werden in <span id="env-path"></span> gespeichert. Backend neu starten, um neue Geräte einzulesen.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Base URL</th>
+            </tr>
+          </thead>
+          <tbody id="device-table"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Logs</h2>
+        <pre id="log-output"></pre>
+      </section>
+    </main>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="modal">
+        <header>
+          <h3>Geräte bearbeiten</h3>
+          <button id="close-overlay" class="icon">×</button>
+        </header>
+        <div class="modal-body">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Base URL</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="device-editor"></tbody>
+          </table>
+          <button id="add-device" class="secondary">Gerät hinzufügen</button>
+        </div>
+        <footer>
+          <button id="save-devices" class="primary">Speichern</button>
+          <button id="cancel-devices" class="secondary">Abbrechen</button>
+        </footer>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

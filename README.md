@@ -29,3 +29,16 @@ Wenn du Mosquitto per Docker laufen hast (Container-Name: mosquitto):
 Hinweis:
 - Backend .env: MQTT_PREFIX=shellyTEST
 - Backend .env: MQTT_URL=mqtt://127.0.0.1:1883
+
+## Desktop-Manager (Electron)
+
+Ein kleines Electron-Programm, um Backend/Frontend zu starten und die Shelly-Geräte in `backend/.env` per Overlay zu bearbeiten.
+
+### Start
+1) In `desktop-app` wechseln
+2) Abhängigkeiten installieren: `npm install`
+3) App starten: `npm start`
+
+### Hinweise
+- Änderungen an den Geräten werden in `backend/.env` gespeichert.
+- Das Backend muss nach Änderungen neu gestartet werden, damit neue Geräte geladen werden.

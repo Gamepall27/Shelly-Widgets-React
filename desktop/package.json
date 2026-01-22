@@ -1,0 +1,14 @@
+{
+  "name": "shelly-widgets-desktop",
+  "version": "0.1.0",
+  "description": "Electron desktop manager for Shelly Widgets",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^30.1.0",
+    "tree-kill": "^1.2.2"
+  }
+}

@@ -3,7 +3,7 @@
 ## Start
 - npm install
 - copy .env.example .env
-- .env anpassen
+- .env anpassen (SHELLY_BASE_URL oder SHELLY_DEVICES)
 - npm start
 
 ## API

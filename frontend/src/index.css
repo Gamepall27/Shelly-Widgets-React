@@ -57,12 +57,26 @@ body {
 
 /* Resize handle */
 .react-resizable-handle {
+  position: absolute;
   width: 16px;
   height: 16px;
   background: rgba(255, 255, 255, 0.25);
   border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.react-resizable-handle-se {
   bottom: 6px;
   right: 6px;
+  cursor: se-resize;
+}
+
+.react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-right: 2px solid rgba(255, 255, 255, 0.65);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.65);
 }
 
 /* =========================
@@ -255,4 +269,114 @@ body {
   height: 100%;
   background: var(--accent, #4fd1c5);
   box-shadow: 0 0 10px var(--accent, #4fd1c5);
+}
+
+/* ===== Circle Indicator ===== */
+.circle-indicator {
+  --percent: 0%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--accent, #4fd1c5) var(--percent),
+    rgba(255,255,255,0.12) 0
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.35);
+}
+
+.circle-indicator-inner {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: rgba(10, 20, 35, 0.75);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ===== Widget Editor ===== */
+.widget-editor-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 20, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.widget-editor {
+  width: min(520px, 90vw);
+  background: rgba(15, 25, 40, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 20px 22px;
+  box-shadow: 0 24px 50px rgba(0,0,0,0.4);
+  color: var(--text-main);
+}
+
+.widget-editor h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+}
+
+.widget-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.widget-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.widget-editor input,
+.widget-editor select {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text-main);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.widget-editor input[type="color"] {
+  padding: 0;
+  height: 36px;
+}
+
+.widget-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #4fd1c5;
+  color: #041313;
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.12);
+  color: var(--text-main);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.85);
+  color: white;
 }

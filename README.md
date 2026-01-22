@@ -1,31 +1,53 @@
-# Shelly Dashboard (MQTT -> Backend -> React)
+# Shelly Widgets Dashboard
 
-## Überblick
-- MQTT Broker: Mosquitto (lokal oder im Netzwerk)
-- Backend: Node.js (Express + MQTT + WebSocket)
-- Frontend: React (Vite), verbindet sich per WebSocket und zeigt Live-Daten
+Dashboard zur Anzeige und Steuerung von Shelly Gen3-Geräten. Das Backend pollt die Shelly HTTP-RPC API und streamt Live-Daten per WebSocket an das React-Frontend.
 
-## Schnellstart (Dev)
-1) MQTT Broker starten (z.B. Mosquitto auf 1883)
-2) Backend:
-   - cd backend
-   - npm install
-   - cp .env.example .env (Windows: copy .env.example .env)
-   - .env anpassen (MQTT_URL, MQTT_PREFIX)
-   - npm start
-3) Frontend:
-   - cd frontend
-   - npm install
-   - npm run dev
-   - Browser: http://localhost:5173
+## Projektstruktur
+- `backend/`: Node.js API + WebSocket, pollt Shelly-Geräte
+- `frontend/`: React (Vite) Dashboard
+- `desktop/`: Electron-Manager zum Starten von Backend/Frontend und Editieren der Geräte
 
-## Fake-Daten senden (ohne Shelly)
-Wenn du Mosquitto per Docker laufen hast (Container-Name: mosquitto):
-- Subscriber:
-  docker exec -it mosquitto sh -lc "mosquitto_sub -h 127.0.0.1 -p 1883 -t 'shellyTEST/#' -v"
-- Publisher (einmalig):
-  docker exec mosquitto sh -lc "mosquitto_pub -h 127.0.0.1 -p 1883 -t 'shellyTEST/status/pm1:0' -m '{\"apower\":42.7,\"voltage\":230.4,\"current\":0.185,\"aenergy\":{\"total\":1234},\"temperature\":{\"tC\":36.5}}'"
+## Schnellstart (Backend + Frontend)
+1) Backend
+   - `cd backend`
+   - `npm install`
+   - `.env.example` nach `.env` kopieren
+   - `.env` anpassen (mind. `SHELLY_BASE_URL` oder `SHELLY_DEVICES`)
+   - `npm start`
+2) Frontend
+   - `cd frontend`
+   - `npm install`
+   - `npm run dev`
+   - Browser: `http://localhost:5173`
 
-Hinweis:
-- Backend .env: MQTT_PREFIX=shellyTEST
-- Backend .env: MQTT_URL=mqtt://127.0.0.1:1883
+Das Frontend nutzt den Vite-Proxy:
+- `/api` -> `http://localhost:3000`
+- `/ws`  -> `ws://localhost:3000/ws`
+
+## Desktop Manager
+Optionaler Electron-Manager, der Backend/Frontend startet und die Geräte in `backend/.env` bearbeitet.
+
+```bash
+cd desktop
+npm install
+npm run start
+```
+
+## Konfiguration (`backend/.env`)
+- `SHELLY_BASE_URL`: Basis-URL eines Shelly-Geräts, z.B. `http://192.168.1.50`
+- `SHELLY_DEVICES`: Liste im Format `id|name|baseUrl`, getrennt mit `,` oder `;`
+  - Beispiel: `1|Kueche|http://192.168.1.50;2|Bad|http://192.168.1.51`
+- `PORT`: HTTP-Port des Backends (default `3000`)
+- `WS_PATH`: WebSocket-Pfad (default `/ws`)
+- `STATUS_POLL_SEC`: Polling-Intervall in Sekunden (default `3`)
+
+Wenn `SHELLY_DEVICES` gesetzt ist, wird das erste Gerät als Standard verwendet.
+
+## API und WebSocket
+- `GET /api/health`
+- `POST /api/switch` body: `{ "on": true|false }`
+- `POST /api/toggle`
+
+WebSocket:
+- `ws://localhost:3000/ws`
+- sendet `snapshot` bei Verbindung, danach `update`

@@ -1,0 +1,12 @@
+{
+  "name": "shelly-widgets-react",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n frontend,backend -c blue,green \"npm --prefix frontend run dev\" \"npm --prefix backend run dev\"",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
